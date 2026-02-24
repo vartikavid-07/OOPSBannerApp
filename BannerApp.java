@@ -1,28 +1,64 @@
 /**
  * BannerApp
- * UC6: Banner rendering using helper methods
+ *
+ * UC7: Store character patterns using an inner static class.
+ * Demonstrates encapsulation, modularity, and reusability.
+ *
+ * @author Vidit
+ * @version 1.6
  */
 public class BannerApp {
 
-    public static void main(String[] args) {
+    /**
+     * Inner static class to store character and its banner pattern
+     */
+    static class CharacterPattern {
+        private char character;
+        private String[] pattern;
 
-        String[] banner = {
-                getOPattern(0) + getOPattern(0) + getPPattern(0) + getSPattern(0),
-                getOPattern(1) + getOPattern(1) + getPPattern(1) + getSPattern(1),
-                getOPattern(2) + getOPattern(2) + getPPattern(2) + getSPattern(2),
-                getOPattern(3) + getOPattern(3) + getPPattern(3) + getSPattern(3),
-                getOPattern(4) + getOPattern(4) + getPPattern(4) + getSPattern(4),
-                getOPattern(5) + getOPattern(5) + getPPattern(5) + getSPattern(5),
-                getOPattern(6) + getOPattern(6) + getPPattern(6) + getSPattern(6)
-        };
+        /**
+         * Constructor to initialize character and pattern
+         * @param character the character
+         * @param pattern 7-line banner pattern
+         */
+        public CharacterPattern(char character, String[] pattern) {
+            this.character = character;
+            this.pattern = pattern;
+        }
 
-        for (String line : banner) {
-            System.out.println(line);
+        /**
+         * Returns pattern line at given row
+         * @param row index of banner row
+         * @return pattern string
+         */
+        public String getPatternLine(int row) {
+            return pattern[row];
+        }
+
+        /**
+         * Returns stored character
+         * @return character
+         */
+        public char getCharacter() {
+            return character;
         }
     }
 
-    static String getOPattern(int row) {
-        String[] O = {
+    // Utility method to build banner line
+    static String buildLine(CharacterPattern[] patterns, int row) {
+        StringBuilder sb = new StringBuilder();
+
+        for (CharacterPattern cp : patterns) {
+            sb.append(cp.getPatternLine(row));
+        }
+
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+
+        // Create pattern objects
+        CharacterPattern O = new CharacterPattern('O', new String[]{
                 "  *****   ",
                 " *     *  ",
                 "*       * ",
@@ -30,12 +66,9 @@ public class BannerApp {
                 "*       * ",
                 " *     *  ",
                 "  *****   "
-        };
-        return O[row];
-    }
+        });
 
-    static String getPPattern(int row) {
-        String[] P = {
+        CharacterPattern P = new CharacterPattern('P', new String[]{
                 "  ******  ",
                 " *     *  ",
                 "*       * ",
@@ -43,12 +76,9 @@ public class BannerApp {
                 "*         ",
                 "*         ",
                 "*         "
-        };
-        return P[row];
-    }
+        });
 
-    static String getSPattern(int row) {
-        String[] S = {
+        CharacterPattern S = new CharacterPattern('S', new String[]{
                 "  ******  ",
                 " *        ",
                 "*         ",
@@ -56,7 +86,14 @@ public class BannerApp {
                 "       *  ",
                 " *     *  ",
                 "  *****   "
-        };
-        return S[row];
+        });
+
+        // Word OOPS → using array of objects
+        CharacterPattern[] word = {O, O, P, S};
+
+        // Print banner
+        for (int i = 0; i < 7; i++) {
+            System.out.println(buildLine(word, i));
+        }
     }
 }
